@@ -8,7 +8,7 @@ A machine learning project that predicts whether a telecom customer will leave (
 
 Customer churn is one of the biggest challenges in the telecom industry. Losing a customer costs far more than retaining one. This project combines a machine learning pipeline with a Power BI business dashboard to identify customers at high risk of churning, understand customer segments, and track retention metrics — so the business can act before it's too late.
 
-> 🚧 **Status:** Machine learning pipeline complete. Power BI dashboard in progress.
+> 🚧 **Status:** Machine learning pipeline complete. Power BI dashboard in progress — Page 1 (Churn Overview) complete.
 
 ---
 
@@ -148,16 +148,14 @@ input_data = {
 
 ---
 
-## 📊 Power BI Dashboard *(In Progress)*
-
+📊 **Power BI Dashboard (In Progress)**
 A business-facing Power BI dashboard is being developed alongside the machine learning model to make the insights accessible to non-technical stakeholders.
 
-### Purpose
-While the ML model predicts churn for individual customers, the Power BI dashboard gives the business a **high-level view** of churn patterns, customer segments, and retention performance — enabling faster, data-driven decisions.
+**Purpose**
+While the ML model predicts churn for individual customers, the Power BI dashboard gives the business a high-level view of churn patterns, customer segments, and retention performance — enabling faster, data-driven decisions.
 
-### Planned Dashboard Pages
-
-**Page 1 — Churn Overview**
+**Planned Dashboard Pages**
+**Page 1 — Churn Overview ✅ (Complete)**
 - Overall churn rate (26.5%)
 - Total churned vs retained customers
 - Churn trend over customer tenure
@@ -175,13 +173,13 @@ While the ML model predicts churn for individual customers, the Power BI dashboa
 - Customers with no online security / tech support — churn risk
 - High-value customers at risk (high MonthlyCharges + Month-to-month contract)
 
-### Key DAX Measures (Planned)
+### Key DAX Measures 
 ```dax
-Churn Rate = DIVIDE(COUNTROWS(FILTER('Data', 'Data'[Churn] = "Yes")), COUNTROWS('Data'))
+Total Churned = COUNTROWS(FILTER('WA_Fn-UseC_-Telco-Customer-Churn', 'WA_Fn-UseC_-Telco-Customer-Churn'[Churn] = "Yes"))
 
-Avg Monthly Charges (Churned) = CALCULATE(AVERAGE('Data'[MonthlyCharges]), 'Data'[Churn] = "Yes")
+Churn Rate = DIVIDE([Total Churned], [Total Customers])
 
-Revenue at Risk = SUMX(FILTER('Data', 'Data'[Churn] = "Yes"), 'Data'[MonthlyCharges])
+Revenue at Risk = SUMX(FILTER('WA_Fn-UseC_-Telco-Customer-Churn', 'WA_Fn-UseC_-Telco-Customer-Churn'[Churn] = "Yes"), 'WA_Fn-UseC_-Telco-Customer-Churn'[MonthlyCharges])
 ```
 
 ### Data Source
@@ -196,29 +194,6 @@ The dashboard connects directly to the same dataset (`WA_Fn-UseC_-Telco-Customer
 - **Class imbalance** handled with SMOTE on training data only (no data leakage)
 - **Explainability** added via SHAP values
 
----
-
-## 🚀 How to Run
-
-1. Clone the repository
-```bash
-git clone https://github.com/yourusername/customer-churn-prediction.git
-cd customer-churn-prediction
-```
-
-2. Install dependencies
-```bash
-pip install numpy pandas matplotlib seaborn scikit-learn imbalanced-learn xgboost shap
-```
-
-3. Open the notebook
-```bash
-jupyter notebook Customer_Churn_Prediction.ipynb
-```
-
-4. Run all cells from top to bottom
-
----
 
 ## 🔮 Future Improvements
 
