@@ -149,9 +149,11 @@ input_data = {
 ---
 
 📊 **Power BI Dashboard (In Progress)**
+
 A business-facing Power BI dashboard is being developed alongside the machine learning model to make the insights accessible to non-technical stakeholders.
 
 **Purpose**
+
 While the ML model predicts churn for individual customers, the Power BI dashboard gives the business a high-level view of churn patterns, customer segments, and retention performance — enabling faster, data-driven decisions.
 
 **Planned Dashboard Pages**
