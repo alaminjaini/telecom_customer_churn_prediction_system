@@ -8,7 +8,7 @@ A machine learning project that predicts whether a telecom customer will leave (
 
 Customer churn is one of the biggest challenges in the telecom industry. Losing a customer costs far more than retaining one. This project combines a machine learning pipeline with a Power BI business dashboard to identify customers at high risk of churning, understand customer segments, and track retention metrics — so the business can act before it's too late.
 
-> 🚧 **Status:** Machine learning pipeline complete. Power BI dashboard in progress — Page 1 (Churn Overview) complete.
+> ✅ **Status:** Machine learning pipeline complete. Power BI dashboard complete — all 3 pages published.
 
 ---
 
@@ -148,40 +148,82 @@ input_data = {
 
 ---
 
-📊 **Power BI Dashboard (In Progress)**
+## 📊 Power BI Dashboard
 
-A business-facing Power BI dashboard is being developed alongside the machine learning model to make the insights accessible to non-technical stakeholders.
+A business-facing 3-page Power BI dashboard built alongside the ML model to make insights accessible to non-technical stakeholders.
 
 **Purpose**
 
 While the ML model predicts churn for individual customers, the Power BI dashboard gives the business a high-level view of churn patterns, customer segments, and retention performance — enabling faster, data-driven decisions.
 
-**Planned Dashboard Pages**
-**Page 1 — Churn Overview ✅ (Complete)**
-- Overall churn rate (26.5%)
-- Total churned vs retained customers
-- Churn trend over customer tenure
-- KPI cards: Total Customers, Churned, Revenue at Risk
+---
 
-**Page 2 — Customer Segmentation**
-- Churn rate by contract type (Month-to-month vs One year vs Two year)
-- Churn rate by internet service type (Fiber optic vs DSL vs None)
-- Churn rate by payment method
-- Senior citizen vs non-senior churn comparison
+### Page 1 — Churn Overview ✅
+> Overall churn rate, revenue at risk, and churn trend by customer tenure.
 
-**Page 3 — Retention Metrics**
-- Average tenure of churned vs retained customers
-- Monthly charges distribution by churn status
-- Customers with no online security / tech support — churn risk
-- High-value customers at risk (high MonthlyCharges + Month-to-month contract)
+**Visuals:**
+- KPI cards: Total Customers (7,043), Churned (1,869), Churn Rate (26.54%), Revenue at Risk ($139K)
+- Donut chart: Churned vs Retained breakdown
+- Line chart: Churn trend by tenure (months 1–72)
+- 3 insight text boxes highlighting key findings
 
-### Key DAX Measures 
+---
+
+### Page 2 — Customer Segmentation ✅
+> Churn breakdown by contract type, internet service, payment method, and senior citizen status.
+
+**Visuals:**
+- Bar chart: Churn rate by contract type (Month-to-month ~42%, One year ~11%, Two year ~3%)
+- Bar chart: Churn rate by internet service (Fiber optic ~41%, DSL ~19%, None ~7%)
+- Bar chart: Churn rate by payment method (Electronic check ~45% highest)
+- 100% Stacked bar: Senior Citizen vs Non-Senior churn with toggle slicer filter
+- 2 insight text boxes
+
+---
+
+### Page 3 — Retention Metrics ✅
+> Tenure analysis, service gaps, and high-value customers at risk.
+
+**Visuals:**
+- KPI cards: Avg Tenure Churned (18 months), Avg Tenure Retained (37.57 months), Avg Monthly Charges Churned ($74.44)
+- KPI cards: High-Value Customers at Risk (1,105), Monthly Revenue at Risk ($96.58K)
+- Bar chart: Avg tenure — Churned vs Retained comparison
+- Bar chart: Service gaps churn rate (No Online Security / No Tech Support ~42%)
+- Column chart: High-Value Customers at Risk by Price Band (Month-to-month, filtered $70+)
+- 2 insight text boxes
+
+### Key DAX Measures
+
 ```dax
-Total Churned = COUNTROWS(FILTER('WA_Fn-UseC_-Telco-Customer-Churn', 'WA_Fn-UseC_-Telco-Customer-Churn'[Churn] = "Yes"))
+Total Customers = COUNTROWS('WA_Fn-UseC_-Telco-Customer-Churn')
+
+Total Churned = COUNTROWS(FILTER('WA_Fn-UseC_-Telco-Customer-Churn', 
+    'WA_Fn-UseC_-Telco-Customer-Churn'[Churn] = "Yes"))
 
 Churn Rate = DIVIDE([Total Churned], [Total Customers])
 
-Revenue at Risk = SUMX(FILTER('WA_Fn-UseC_-Telco-Customer-Churn', 'WA_Fn-UseC_-Telco-Customer-Churn'[Churn] = "Yes"), 'WA_Fn-UseC_-Telco-Customer-Churn'[MonthlyCharges])
+Revenue at Risk = SUMX(FILTER('WA_Fn-UseC_-Telco-Customer-Churn', 
+    'WA_Fn-UseC_-Telco-Customer-Churn'[Churn] = "Yes"), 
+    'WA_Fn-UseC_-Telco-Customer-Churn'[MonthlyCharges])
+
+Avg Tenure Churned = CALCULATE(AVERAGE('WA_Fn-UseC_-Telco-Customer-Churn'[tenure]), 
+    'WA_Fn-UseC_-Telco-Customer-Churn'[Churn] = "Yes")
+
+Avg Tenure Retained = CALCULATE(AVERAGE('WA_Fn-UseC_-Telco-Customer-Churn'[tenure]), 
+    'WA_Fn-UseC_-Telco-Customer-Churn'[Churn] = "No")
+
+Avg Monthly Charges Churned = CALCULATE(AVERAGE('WA_Fn-UseC_-Telco-Customer-Churn'[MonthlyCharges]), 
+    'WA_Fn-UseC_-Telco-Customer-Churn'[Churn] = "Yes")
+
+High Value At Risk Count = CALCULATE(COUNTROWS('WA_Fn-UseC_-Telco-Customer-Churn'),
+    'WA_Fn-UseC_-Telco-Customer-Churn'[MonthlyCharges] > 70,
+    'WA_Fn-UseC_-Telco-Customer-Churn'[Contract] = "Month-to-month",
+    'WA_Fn-UseC_-Telco-Customer-Churn'[Churn] = "Yes")
+
+High Value At Risk Revenue = CALCULATE(SUM('WA_Fn-UseC_-Telco-Customer-Churn'[MonthlyCharges]),
+    'WA_Fn-UseC_-Telco-Customer-Churn'[MonthlyCharges] > 70,
+    'WA_Fn-UseC_-Telco-Customer-Churn'[Contract] = "Month-to-month",
+    'WA_Fn-UseC_-Telco-Customer-Churn'[Churn] = "Yes")
 ```
 
 ### Data Source
